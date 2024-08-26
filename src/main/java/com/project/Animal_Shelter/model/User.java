@@ -1,8 +1,6 @@
 package com.project.Animal_Shelter.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-
 import java.util.Set;
 
 @Entity
@@ -23,11 +21,37 @@ public class User {
     )
     private Set<Role> roles;
 
-    public void setUsername(String username) {
-    }
-
-    public void setPassword(String encode) {
-    }
-
     // Getters y Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
