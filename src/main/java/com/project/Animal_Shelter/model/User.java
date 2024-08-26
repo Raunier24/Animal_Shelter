@@ -1,6 +1,8 @@
 package com.project.Animal_Shelter.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+
 import java.util.Set;
 
 @Entity
@@ -20,6 +22,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    public void setUsername(String username) {
+    }
+
+    public void setPassword(String encode) {
+    }
 
     // Getters y Setters
 }
