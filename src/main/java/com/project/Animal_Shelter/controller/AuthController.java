@@ -6,6 +6,7 @@ import com.project.Animal_Shelter.model.User;
 import com.project.Animal_Shelter.repository.UserRepository;
 import com.project.Animal_Shelter.security.jwt.JwtUtils;
 import com.project.Animal_Shelter.security.jwt.UserDetailsImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
