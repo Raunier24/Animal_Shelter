@@ -1,55 +1,57 @@
 package com.project.Animal_Shelter.security.config;
 
-import com.project.Animal_Shelter.security.jwt.JwtAuthTokenFilter;
-import com.project.Animal_Shelter.service.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.project.Animal_Shelter.security.jwt.JwtAuthTokenFilter;
+import com.project.Animal_Shelter.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfiguration {
+public class SecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthTokenFilter jwtAuthTokenFilter;
 
-    @Autowired
-    private JwtAuthTokenFilter jwtAuthTokenFilter;
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthTokenFilter jwtAuthTokenFilter) {
+        this.userDetailsService = userDetailsService;
+        this.jwtAuthTokenFilter = jwtAuthTokenFilter;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/api/auth/**").permitAll()  // Permitir el acceso público a los endpoints de autenticación
-            .antMatchers("/api/donations/**").hasRole("ADMIN")  // Solo los administradores pueden gestionar donaciones
-            .anyRequest().authenticated()
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);  // Sin estado
-
-        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
+    // Configuración del PasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // Configuración del SecurityFilterChain en lugar de WebSecurityConfigurerAdapter
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll() // Permitir rutas de autenticación
+                        .requestMatchers("/api/donations/**").hasRole("ADMIN") // Requerir el rol de ADMIN para estas rutas
+                        .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sin estado
+                .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class); // Filtro JWT
+
+        return http.build();
+    }
+
+    // Para proporcionar el AuthenticationManager (opcional si es necesario para autenticación manual)
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }
