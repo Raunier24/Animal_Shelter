@@ -1,6 +1,6 @@
 package com.project.Animal_Shelter.security.jwt;
 
-import com.project.Animal_Shelter.security.service.UserDetailsServiceImpl;
+import com.project.Animal_Shelter.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;

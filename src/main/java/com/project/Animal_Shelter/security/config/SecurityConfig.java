@@ -1,7 +1,7 @@
 package com.project.Animal_Shelter.security.config;
 
 import com.project.Animal_Shelter.security.jwt.JwtAuthTokenFilter;
-import com.project.Animal_Shelter.security.service.UserDetailsServiceImpl;
+import com.project.Animal_Shelter.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.project.Animal_Shelter.security.service;
+package com.project.Animal_Shelter.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
