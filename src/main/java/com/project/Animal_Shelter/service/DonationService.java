@@ -39,6 +39,11 @@ public class DonationService {
         return donationRepository.save(donation);
     }
 
+    // Nuevo método para obtener las donaciones por usuario
+    public List<Donation> getDonationsByUserId(Long userId) {
+        return donationRepository.findByUserId(userId);
+    }
+
     // Actualizar una donación existente
     public Donation updateDonation(Long id, Donation donationDetails) {
         Donation donation = donationRepository.findById(id)

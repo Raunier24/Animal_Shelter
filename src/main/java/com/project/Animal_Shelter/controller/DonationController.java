@@ -27,6 +27,12 @@ public class DonationController {
         return donationService.getDonationById(id);
     }
 
+    // Nuevo endpoint para obtener donaciones por usuario
+    @GetMapping("/user/{userId}")
+    public List<Donation> getDonationsByUserId(@PathVariable Long userId) {
+        return donationService.getDonationsByUserId(userId);
+    }
+
     @PostMapping
     public Donation addDonation(@RequestParam Long userId, @Valid @RequestBody Donation donation) {
         return donationService.addDonation(userId, donation);
