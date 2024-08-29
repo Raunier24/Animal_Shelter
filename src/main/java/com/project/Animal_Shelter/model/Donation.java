@@ -1,12 +1,8 @@
 package com.project.Animal_Shelter.model;
 
-
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Donation {
@@ -15,12 +11,19 @@ public class Donation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre del donante no puede estar vacío")
     private String donorName;
+
+    @NotNull(message = "El monto de la donación es obligatorio")
     private double amount;
+
     private String message;
 
-    // Getters y Setters
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -51,5 +54,13 @@ public class Donation {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

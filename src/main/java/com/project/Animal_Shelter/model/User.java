@@ -28,6 +28,9 @@ public class User {
     )
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Donation> donations;
+
     // Getters y Setters
 
     public Long getId() {
@@ -60,5 +63,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Donation> getDonations() {
+        return donations;
+    }
+
+    public void setDonations(Set<Donation> donations) {
+        this.donations = donations;
     }
 }
