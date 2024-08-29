@@ -1,5 +1,6 @@
 package com.project.Animal_Shelter.service;
 
+import com.project.Animal_Shelter.model.Role;
 import com.project.Animal_Shelter.model.User;
 import com.project.Animal_Shelter.repository.UserRepository;
 import com.project.Animal_Shelter.security.jwt.UserDetailsImpl;
@@ -11,7 +12,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,6 +38,12 @@ public class UserDetailsServiceImplTest {
         String username = "testuser";
         User user = new User();
         user.setUsername(username);
+        user.setId(1L);
+        user.setPassword("password");
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role("ROLE_USER"));
+        user.setRoles(roles);
+
         UserDetails userDetails = UserDetailsImpl.build(user);
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
@@ -42,7 +51,9 @@ public class UserDetailsServiceImplTest {
         UserDetails result = userDetailsService.loadUserByUsername(username);
 
         // Assert
-        assertEquals(userDetails, result);
+        assertEquals(userDetails.getUsername(), result.getUsername());
+        assertEquals(userDetails.getPassword(), result.getPassword());
+        assertEquals(userDetails.getAuthorities(), result.getAuthorities());
     }
 
     @Test

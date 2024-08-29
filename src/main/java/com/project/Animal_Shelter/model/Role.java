@@ -12,6 +12,15 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
+    // Constructor vacío
+    public Role() {
+    }
+
+    // Constructor que acepta un String y lo convierte a RoleName
+    public Role(String roleName) {
+        this.name = RoleName.valueOf(roleName);
+    }
+
     // Getters y Setters
     public Long getId() {
         return id;
